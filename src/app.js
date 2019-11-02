@@ -5,11 +5,13 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import HomeScreen from './home-screen';
 import DetailsScreen from './details-screen';
+import SpringScreen from './spring-screen';
 
 const RootStack = createStackNavigator(
   {
     Home: HomeScreen,
     Details: DetailsScreen,
+    Spring: SpringScreen,
   },
   {
     initialRouteName: 'Home',
