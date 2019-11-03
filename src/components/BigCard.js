@@ -30,6 +30,7 @@ export default class BigCard extends Component<Props> {
           value={item.value}
           index={index}
           key={item.label}
+          animateStatBars={this.props.animateStatBars}
         />
       );
     });

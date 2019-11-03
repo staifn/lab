@@ -7,7 +7,8 @@ const CardList = ({
   cardAction,
   viewAction,
   bookmarkAction,
-  shareAction
+  shareAction,
+  animateStatBars,
 }) => {
   return (
     <ScrollView>

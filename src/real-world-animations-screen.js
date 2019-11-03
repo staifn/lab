@@ -71,6 +71,7 @@ export default class App extends Component<Props> {
             title={this.state.pokemon}
             image={this.state.image}
             data={this.state.stats}
+            animateStatBars={this.state.isModalVisible}
           />
         </AnimatedModal>
       </View>

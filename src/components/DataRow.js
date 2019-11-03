@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import AnimatedBar from "./AnimatedBar";
 
-const DataRow = ({ label, value, index }) => {
+const DataRow = ({ animateStatBars, label, value, index }) => {
   return (
     <View style={styles.statusRow}>
       <View style={styles.statusLabel}>
@@ -12,7 +12,7 @@ const DataRow = ({ label, value, index }) => {
         <Text style={styles.statusValueText}>{value}</Text>
       </View>
       <View style={styles.statusBar}>
-        <AnimatedBar value={value} index={index} />
+        <AnimatedBar animate={animateStatBars} value={value} index={index} />
       </View>
     </View>
   );
