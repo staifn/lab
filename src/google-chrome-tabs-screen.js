@@ -31,11 +31,9 @@ export default class App extends React.Component<{}, AppState> {
           >
             <TabBar color="#3b4043" backgroundColor="#f8f9fa" borderColor="#f8f9fa" />
           </MaskedViewIOS>
-          <View style={styles.scrollView}>
-
           <Animated.ScrollView
-            style={{  ...{backgroundColor: 'red'} }}
-            showsHorizontalScrollIndicator={false}
+            style={{ ...StyleSheet.absoluteFillObject }}
+            showsHorizontalScrollIndicator={true}
             scrollEventThrottle={16}
             bounces={false}
             contentContainerStyle={{ width: TABBAR_WIDTH * 2 }}
@@ -52,7 +50,6 @@ export default class App extends React.Component<{}, AppState> {
             )}
             horizontal={false}
           />
-          </View>
         </View>
       </SafeAreaView>
     );
@@ -67,11 +64,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: TABBAR_WIDTH,
-    height: TABBAR_HEIGHT*20
-  },
-  scrollView: {
-    width: TABBAR_WIDTH,
-    height: TABBAR_HEIGHT*20
+    height: TABBAR_HEIGHT
   },
   cursor: {
     height: TABBAR_HEIGHT,

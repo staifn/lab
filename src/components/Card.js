@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
+import { Animated, Easing, View, Text, Image, TouchableWithoutFeedback } from "react-native";
 import IconButton from "./IconButton";
 
 const Card = ({
@@ -9,13 +9,39 @@ const Card = ({
   bookmarkAction,
   shareAction
 }) => {
+  let scaleValue = new Animated.Value(0);
+  const cardScale = scaleValue.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [1, 1.1, 1.2],
+  })
+  let transformStyle = { ...styles.card, transform: [{ scale: cardScale }] };
+
   return (
     <TouchableWithoutFeedback
-      onPress={() => {
+      onPressIn={() => {
+        Animated.timing(scaleValue, {
+            toValue: 1,
+            duration: 250,
+            easing: Easing.linear,
+            useNativeDriver: true
+          }
+        ).start()
         cardAction();
       }}
+        onPressOut={() => {
+          Animated.timing(
+            scaleValue, {
+              toValue: 0,
+              duration: 100,
+              easing: Easing.linear,
+              useNativeDriver: true
+            }
+          ).start()
+          cardAction();
+        }}
+        onPress={() => console.log('press')}
     >
-      <View style={styles.card}>
+      <Animated.View style={transformStyle}>
         <Image source={item.pic} style={styles.thumbnail} />
         <Text style={styles.name}>{item.name}</Text>
         <View style={styles.icons}>
@@ -29,7 +55,7 @@ const Card = ({
           <IconButton icon="bookmark" onPress={bookmarkAction} data={item} />
           <IconButton icon="share" onPress={shareAction} data={item} />
         </View>
-      </View>
+      </Animated.View>
     </TouchableWithoutFeedback>
   );
 };
