@@ -44,6 +44,7 @@ export default ({ title, image, children, onClose, visible }) => {
 const styles = {
   container: {
     position: "absolute",
+    zIndex: 2,
     height: height,
     width: width,
     bottom: -height,

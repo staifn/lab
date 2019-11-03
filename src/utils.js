@@ -29,3 +29,7 @@ export function getNavigationHeader() {
     ios: isIPhoneX ? Header.HEIGHT + 24 : Header.HEIGHT,
   })
 }
+
+export const getRandomInt = (max, min) => {
+  return Math.floor(Math.random() * (max - min) + min);
+};
