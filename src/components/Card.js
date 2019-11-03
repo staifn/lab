@@ -28,18 +28,18 @@ const Card = ({
         ).start()
         cardAction();
       }}
-        onPressOut={() => {
-          Animated.timing(
-            scaleValue, {
-              toValue: 0,
-              duration: 100,
-              easing: Easing.linear,
-              useNativeDriver: true
-            }
-          ).start()
-          cardAction();
-        }}
-        onPress={() => console.log('press')}
+      onPressOut={() => {
+        Animated.timing(
+          scaleValue, {
+            toValue: 0,
+            duration: 100,
+            easing: Easing.linear,
+            useNativeDriver: true
+          }
+        ).start()
+        cardAction();
+      }}
+      onPress={() => console.log('press')}
     >
       <Animated.View style={transformStyle}>
         <Image source={item.pic} style={styles.thumbnail} />

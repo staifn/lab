@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 
 import pokemon from "./data/pokemon";
 import pokemon_stats from "./data/pokemon-stats";
@@ -46,12 +46,6 @@ export default class App extends Component<Props> {
   bookmarkAction = () => {};
 
   shareAction = () => {};
-
-  closeModal = () => {
-    this.setState({
-      isModalVisible: false
-    });
-  };
 
   render() {
     return (

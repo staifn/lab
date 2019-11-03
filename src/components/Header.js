@@ -12,7 +12,6 @@ const Header = ({ title, children }) => {
 
 const styles = {
   header: {
-    paddingTop: 10,
     backgroundColor: "#3e3e3e"
   },
   header_text: {

@@ -23,7 +23,7 @@ const styles = {
     flex: 10,
     flexDirection: "row",
     justifyContent: "space-around",
-    paddingTop: 5
+    paddingVertical: 40,
   },
   statusLabel: {
     flex: 3,
