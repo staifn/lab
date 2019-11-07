@@ -14,7 +14,7 @@ const CardList = ({
 }) => {
 
   return (
-    <Animated.ScrollView
+    <ScrollView
       scrollEventThrottle={1}
       style={styles.scroll}
       onScroll={onScroll}
@@ -55,7 +55,7 @@ const CardList = ({
             numColumns={2}
           />
       </View>
-    </Animated.ScrollView>
+    </ScrollView>
   );
 };
 

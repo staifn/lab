@@ -18,6 +18,21 @@ export default class App extends Component<Props> {
     isModalVisible: false
   };
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: "", // empty because we're using the label inside the AnimatedHeader
+      headerStyle: {
+        elevation: 0, // only applied to Android to remove the shadow in the header
+        shadowOpacity: 0, // for removing the shadow in the header
+        backgroundColor: "#B4A608"
+      },
+      headerTitleStyle: {
+        color: "#FFF"
+      }
+    };
+  };
+
+
   constructor(props) {
     super(props);
     this.pokemon_stats = [];
@@ -48,7 +63,9 @@ export default class App extends Component<Props> {
 
   bookmarkAction = () => {};
 
-  shareAction = () => {};
+  shareAction = (pokemon, image) => {
+    this.props.navigation.navigate("Share"); // add this inside the existing shareAction function
+  };
 
   render() {
     let nativeScrollY = Animated.add(
@@ -68,10 +85,7 @@ export default class App extends Component<Props> {
           bookmarkAction={this.bookmarkAction}
           shareAction={this.shareAction}
           onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: this.nativeScrollY } } }],
-          {
-            useNativeDriver: true
-          }
+          [{ nativeEvent: { contentOffset: { y: this.nativeScrollY } } }]
         )}
         />
         <AnimatedModal
