@@ -35,9 +35,17 @@ export default (props) => (
         <View style={{flex: 1, height: '100%', backgroundColor: '#e1e1e1'}} />
       </MaskedView>
     <Button
-      title="Go to Pan Responder"
-      onPress={() => props.navigation.navigate('PanResponder')}
+      title="Go to simple layout animation"
+      onPress={() => props.navigation.navigate('SimpleLayoutAnimation')}
     />
+  <Button
+    title="Go to Pan drag and drop"
+    onPress={() => props.navigation.navigate('DragAndDropTag')}
+  />
+  <Button
+    title="Go to Pan Responder"
+    onPress={() => props.navigation.navigate('PanResponder')}
+  />
 <Button
   title="Go to Real world animations"
   onPress={() => props.navigation.navigate('RealWorldAnimations')}

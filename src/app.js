@@ -10,6 +10,8 @@ import GoogleChromeTabsScreen from './google-chrome-tabs-screen';
 import RealWorldAnimationsScreen from './real-world-animations-screen';
 import PanResponderScreen from './pan-responder-screen';
 import ShareScreen from './share-screen';
+import DragAndDropTagScreen from './drag-and-drop-tag-screen';
+import SimpleLayoutAnimationScreen from './simple-layout-animation-screen';
 
 const transitionConfig = () => {
       return {
@@ -60,6 +62,8 @@ const RootStack = createStackNavigator(
     RealWorldAnimations: RealWorldAnimationsScreen,
     PanResponder: PanResponderScreen,
     Share: ShareScreen,
+    DragAndDropTag: DragAndDropTagScreen,
+    SimpleLayoutAnimation: SimpleLayoutAnimationScreen,
   },
   {
     initialRouteName: 'Home',
