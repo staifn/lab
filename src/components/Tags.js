@@ -1,13 +1,14 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useEffect, useState, useRef } from 'react';
 import {
   LayoutAnimation,
   PanResponder,
   StyleSheet,
+  Text,
   View
 } from 'react-native';
-import TagsArea from './TagsArea';
+import Tag from './Tag';
 import type { TagObject, GestureState } from '../types';
 import { isPointWithinArea, moveArrayElement } from '../helpers';
 
@@ -27,48 +28,37 @@ type State = {
   dndEnabled: boolean,
 };
 
-export default class Tags extends PureComponent<Props, State> {
+export default (props) => {
+  const animationDuration = 100;
 
-  props: Props;
-
-  panResponder: PanResponder;
-  tagBeingDragged: ?TagObject;
-
-  static defaultProps = {
-    animationDuration: 100
-  };
-
-  state: State = {
-    // Convert passed array of tag titles to array of objects of TagObject type,
-    // so ['tag', 'another'] becomes [{ title: 'tag' }, { title: 'another' }]
-    tags: [...new Set(this.props.tags)]       // remove duplicates
-      .map((title: string) => ({ title })),   // convert to objects
-    dndEnabled: true,                         // drag and drop enabled
-  };
-  // Initialize PanResponder
-  componentWillMount() {
-    this.panResponder = this.createPanResponder();
-  }
-  componentWillUpdate() {
+  // static defaultProps = {
+  //   animationDuration: 200
+  // };
+  const [tags, setTags] = useState([...new Set(props.tags)]       // remove duplicates
+    .map((title: string) => ({ title })));
+    const [dndEnabled, setDndEnabled] = useState(true);
+  const [tagBeingDragged, setTagBeingDragged] = useState();
+  const tagBeingDraggedRef = useRef('');
+  const panResponder = PanResponder.create({
+    // Handle drag gesture
+    onMoveShouldSetPanResponder: (_, gestureState: GestureState) => onMoveShouldSetPanResponder(gestureState),
+    onPanResponderGrant: (_, gestureState: GestureState) => onPanResponderGrant(),
+    onPanResponderMove: (_, gestureState: GestureState) => onPanResponderMove(gestureState),
+    // Handle drop gesture
+    onPanResponderRelease: (_, gestureState: GestureState) => onPanResponderEnd(),
+    onPanResponderTerminate: (_, gestureState: GestureState) => onPanResponderEnd(),
+  });
+  useEffect(() => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
-      duration: this.props.animationDuration
+      duration: animationDuration
     });
-  }
-
-    // Create PanResponder
-  createPanResponder = (): PanResponder => PanResponder.create({
-    // Handle drag gesture
-    onMoveShouldSetPanResponder: (_, gestureState: GestureState) => this.onMoveShouldSetPanResponder(gestureState),
-    onPanResponderGrant: (_, gestureState: GestureState) => this.onPanResponderGrant(),
-    onPanResponderMove: (_, gestureState: GestureState) => this.onPanResponderMove(gestureState),
-    // Handle drop gesture
-    onPanResponderRelease: (_, gestureState: GestureState) => this.onPanResponderEnd(),
-    onPanResponderTerminate: (_, gestureState: GestureState) => this.onPanResponderEnd(),
-  });
-
+  })
+  useEffect(() => {
+    tagBeingDraggedRef.current = tagBeingDragged;
+  }, [tagBeingDragged])
   // Find out if we need to start handling tag dragging gesture
-onMoveShouldSetPanResponder = (gestureState: GestureState): boolean => {
+const onMoveShouldSetPanResponder = (gestureState: GestureState): boolean => {
   const { dx, dy, moveX, moveY, numberActiveTouches } = gestureState;
 
   // Do not set pan responder if a multi touch gesture is occurring
@@ -82,10 +72,10 @@ onMoveShouldSetPanResponder = (gestureState: GestureState): boolean => {
   }
 
   // Find the tag below user's finger at given coordinates
-  const tag = this.findTagAtCoordinates(moveX, moveY);
+  const tag = findTagAtCoordinates(moveX, moveY);
   if (tag) {
-    // assign it to `this.tagBeingDragged` while dragging
-    this.tagBeingDragged = tag;
+    // assign it to `tagBeingDragged` while dragging
+    tagBeingDraggedRef.current = tag;
     // and tell PanResponder to start handling the gesture by calling `onPanResponderMove`
     return true;
   }
@@ -94,126 +84,123 @@ onMoveShouldSetPanResponder = (gestureState: GestureState): boolean => {
 };
 
 // Called when gesture is granted
-onPanResponderGrant = (): void => {
-  this.updateTagState(this.tagBeingDragged, { isBeingDragged: true });
+const onPanResponderGrant = (): void => {
+  updateTagState(tagBeingDraggedRef.current, { isBeingDragged: true });
 };
 
 // Handle drag gesture
-onPanResponderMove = (gestureState: GestureState): void => {
+const onPanResponderMove = (gestureState: GestureState): void => {
   const { moveX, moveY } = gestureState;
   // Do nothing if dnd is disabled
-  if (!this.state.dndEnabled) {
+  if (!dndEnabled) {
     return;
   }
   // Find the tag we're dragging the current tag over
-  const draggedOverTag = this.findTagAtCoordinates(moveX, moveY, this.tagBeingDragged);
+  const draggedOverTag = findTagAtCoordinates(moveX, moveY, tagBeingDraggedRef.current);
   if (draggedOverTag) {
-    this.swapTags(this.tagBeingDragged, draggedOverTag);
+    swapTags(tagBeingDraggedRef.current, draggedOverTag);
   }
 };
 
 // Called after gesture ends
-onPanResponderEnd = (): void => {
-  this.updateTagState(this.tagBeingDragged, { isBeingDragged: false });
-  this.tagBeingDragged = undefined;
+const onPanResponderEnd = (): void => {
+  updateTagState(tagBeingDraggedRef.current, { isBeingDragged: false });
+  setTagBeingDragged(undefined);
 };
 
 // Enable dnd back after the animation is over
-enableDndAfterAnimating = (): void => {
-  setTimeout(this.enableDnd, this.props.animationDuration)
+const enableDndAfterAnimating = (): void => {
+  setTimeout(enableDnd, animationDuration)
 };
 
-enableDnd = (): void => {
-  this.setState({ dndEnabled: true });
+const enableDnd = (): void => {
+  setDndEnabled(true);
 };
 
 // Find the tag at given coordinates
-findTagAtCoordinates = (x: number, y: number, exceptTag?: TagObject): ?TagObject => {
-  return this.state.tags.find((tag) =>
+const findTagAtCoordinates = (x: number, y: number, exceptTag?: TagObject): ?TagObject => {
+  return tags.find((tag) =>
     tag.tlX && tag.tlY && tag.brX && tag.brY
     && isPointWithinArea(x, y, tag.tlX, tag.tlY, tag.brX, tag.brY)
     && (!exceptTag || exceptTag.title !== tag.title)
   );
 };
 
-  removeTag = (tag: TagObject): void => {
-    this.setState((state: State) => {
-      const index = state.tags.findIndex(({ title }) => title === tag.title);
-      return {
-        tags: [
-          // Remove the tag
-          ...state.tags.slice(0, index),
-          ...state.tags.slice(index + 1),
-        ]
-      }
-    });
+  const removeTag = (tag: TagObject): void => {
+    const index = tags.findIndex(({ title }) => title === tag.title);
+    setTags([
+      // Remove the tag
+      ...tags.slice(0, index),
+      ...tags.slice(index + 1),
+    ])
   };
   // Swap two tags
-swapTags = (draggedTag: TagObject, anotherTag: TagObject): void => {
-  this.setState((state: State) => {
-    const draggedTagIndex = state.tags.findIndex(({ title }) => title === draggedTag.title);
-    const anotherTagIndex = state.tags.findIndex(({ title }) => title === anotherTag.title);
-    return {
-      tags: moveArrayElement(
-        state.tags,
-        draggedTagIndex,
-        anotherTagIndex,
-      ),
-      dndEnabled: false,
-    }
-  }, this.enableDndAfterAnimating);
+const swapTags = (draggedTag: TagObject, anotherTag: TagObject): void => {
+  const draggedTagIndex = tags.findIndex(({ title }) => title === draggedTag.title);
+  const anotherTagIndex = tags.findIndex(({ title }) => title === anotherTag.title);
+  setTags( moveArrayElement(
+    tags,
+    draggedTagIndex,
+    anotherTagIndex,
+  ));
+  setDndEnabled(false);
+  enableDndAfterAnimating();
 };
 
   // Update the tag in the state with given props
-updateTagState = (tag: TagObject, props: Object): void => {
-  this.setState((state: State) => {
-    const index = state.tags.findIndex(({ title }) => title === tag.title);
-    return {
-      tags: [
-        ...state.tags.slice(0, index),
-        {
-          ...state.tags[index],
-          ...props,
-        },
-        ...state.tags.slice(index + 1),
-      ],
-    }
-  });
+const updateTagState = (tag: TagObject, props: Object): void => {
+  const index = tags.findIndex(({ title }) => title === tag.title);
+  setTags([
+    ...tags.slice(0, index),
+    {
+      ...tags[index],
+      ...props,
+    },
+    ...tags.slice(index + 1),
+  ]);
 };
 
 // Update tag coordinates in the state
-onRenderTag = (tag: TagObject,
+const onRenderTag = (tag: TagObject,
                screenX: number,
                screenY: number,
                width: number,
                height: number): void => {
-  this.updateTagState(tag, {
+  updateTagState(tag, {
     tlX: screenX,
     tlY: screenY,
     brX: screenX + width,
     brY: screenY + height,
   });
 };
-  render() {
-    console.log('this.state', this.state)
-    const { tags } = this.state;
     return (
       <View
         style={styles.container}
-        {...this.panResponder.panHandlers}
+        {...panResponder.panHandlers}
 
       >
+      <View style={styles.tags}>
 
-        <TagsArea
-          tags={tags}
-          onPress={this.removeTag} // do nothing for now
-          onRenderTag={this.onRenderTag}
-          onPressAddNew={this.props.onPressAddNewTag}
-        />
+        {tags.map(tag =>
+          <Tag
+            key={tag.title}
+            tag={tag}
+            onPress={(removeTag)}
+            onRender={onRenderTag}
+          />
+        )}
+
+        <Text
+          style={styles.add}
+          onPress={props.onPressAddNewTag}
+        >
+          Add new
+        </Text>
+
+      </View>
 
       </View>
     );
-  }
 
 }
 
@@ -221,5 +208,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 15,
+  },
+  tags: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderRadius: 5,
+    borderWidth: 2,
+    paddingBottom: 10,
+    paddingHorizontal: 15,
+    paddingTop: 15,
+  },
+  add: {
+    backgroundColor: 'transparent',
+    color: '#FFFFFF',
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    textDecorationLine: 'underline',
   },
 });

@@ -29,11 +29,13 @@ export default class Tag extends PureComponent<Props> {
     ...styles.tag,
     ...(this.props.tag.isBeingDragged ? styles.tagBeingDragged : {}),
   });
+  componentDidMount = () => {
+    setTimeout(() => this.onLayout(), 800) // need to be recalculate because of the navigation transition
+  }
 
   // Call view container's measure function to measure tag position on the screen
   onLayout = (): void => {
-  console.log('this.container', this.container)
-    this.container && this.container.measure(this.onMeasure);
+    this.container &&  this.container.measure(this.onMeasure);
   };
 
   // Pass tag coordinates up to the parent component
