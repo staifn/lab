@@ -2,11 +2,13 @@
 
 import React, { PureComponent, useEffect, useState, useRef } from 'react';
 import {
+  Animated,
   LayoutAnimation,
   PanResponder,
   StyleSheet,
   Text,
-  View
+  View,
+  ScrollView
 } from 'react-native';
 import Tag from './Tag';
 import type { TagObject, GestureState } from '../types';
@@ -29,7 +31,8 @@ type State = {
 };
 
 export default (props) => {
-  const animationDuration = 100;
+  const animationDuration = 300;
+  const nativeScrollY = useRef(new Animated.Value(0));
 
   // static defaultProps = {
   //   animationDuration: 200
@@ -72,7 +75,7 @@ const onMoveShouldSetPanResponder = (gestureState: GestureState): boolean => {
   }
 
   // Find the tag below user's finger at given coordinates
-  const tag = findTagAtCoordinates(moveX, moveY);
+  const tag = findTagAtCoordinates(moveX, moveY + nativeScrollY.current._value);
   if (tag) {
     // assign it to `tagBeingDragged` while dragging
     tagBeingDraggedRef.current = tag;
@@ -96,7 +99,7 @@ const onPanResponderMove = (gestureState: GestureState): void => {
     return;
   }
   // Find the tag we're dragging the current tag over
-  const draggedOverTag = findTagAtCoordinates(moveX, moveY, tagBeingDraggedRef.current);
+  const draggedOverTag = findTagAtCoordinates(moveX, moveY + nativeScrollY.current._value, tagBeingDraggedRef.current);
   if (draggedOverTag) {
     swapTags(tagBeingDraggedRef.current, draggedOverTag);
   }
@@ -168,9 +171,9 @@ const onRenderTag = (tag: TagObject,
                height: number): void => {
   updateTagState(tag, {
     tlX: screenX,
-    tlY: screenY,
+    tlY: screenY + nativeScrollY.current._value,
     brX: screenX + width,
-    brY: screenY + height,
+    brY: screenY + height + nativeScrollY.current._value,
   });
 };
     return (
@@ -179,7 +182,15 @@ const onRenderTag = (tag: TagObject,
         {...panResponder.panHandlers}
 
       >
-      <View style={styles.tags}>
+      <Animated.ScrollView style={styles.tags} onScroll={Animated.event(
+        [
+          {
+            nativeEvent: {
+              contentOffset: { y: nativeScrollY.current }
+            }
+          }
+        ],
+      )}>
 
         {tags.map(tag =>
           <Tag
@@ -197,7 +208,7 @@ const onRenderTag = (tag: TagObject,
           Add new
         </Text>
 
-      </View>
+      </Animated.ScrollView>
 
       </View>
     );
@@ -210,8 +221,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   tags: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
     borderColor: 'rgba(255,255,255,0.5)',
     borderRadius: 5,
     borderWidth: 2,
