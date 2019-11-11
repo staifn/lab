@@ -1,5 +1,5 @@
-import React from 'react';
-import { Animated, FlatList, PanResponder, StyleSheet, Text, View } from 'react-native';
+import React, { createRef } from 'react';
+import { Animated, Button, FlatList, PanResponder, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -56,6 +56,8 @@ export default class App extends React.Component {
   point = new Animated.ValueXY();
   currentY = 0;
   active = false;
+  flatList = createRef();
+  flatlistHeight = 0;
   constructor(props) {
     super(props)
     this._panResponder = PanResponder.create({
@@ -113,6 +115,17 @@ export default class App extends React.Component {
       return;
     }
     requestAnimationFrame(() => {
+      if (this.currentY + 100 > this.flatlistHeight) {
+        this.flatList.current.scrollToOffset({
+          offset: this.scrollOffset + 20,
+          animated: false,
+        })
+      } else if (this.currentY < 100) {
+        this.flatList.current.scrollToOffset({
+          offset: this.scrollOffset - 20,
+          animated: false,
+        })
+      }
       const newIdx = this.yToIndex(this.currentY)
       if (this.currentIdx !== newIdx) {
         console.log('reordering')
@@ -162,14 +175,22 @@ export default class App extends React.Component {
       </View>
     );
     return (
-      <View style={styles.container}>
-      <View style={{ height: 100}}></View>
+      <SafeAreaView style={styles.container}>
+      <View style={{ height: 0}}></View>
         {dragging && (<Animated.View style={{ position: 'absolute', backgroundColor: 'black', zIndex: 2, width: '100%', top: this.point.getLayout().top }}>
           {renderItem({ item: data[draggingIdx], index: -1 }, true)}
         </Animated.View>
       )}
         <FlatList
-        scrollEnabled={!dragging}
+        ListHeaderComponent={() => {
+          return (
+            <Button title='scroll down' onPress={() => {
+              this.flatList.current
+            }} />
+          )
+        }}
+          ref={this.flatList}
+          scrollEnabled={!dragging}
           style={{ width: '100%'}}
           data={data}
           renderItem={renderItem}
@@ -178,12 +199,12 @@ export default class App extends React.Component {
             this.scrollOffset = e.nativeEvent.contentOffset.y
           }}
           onLayout={e => {
-            this.flatlistTopOffset = e.nativeEvent.layout.y
-            console.log('this.flatlistTopOffset', e.nativeEvent)
+            this.flatlistTopOffset = e.nativeEvent.layout.y;
+            this.flatlistHeight = e.nativeEvent.layout.height;
           }}
           scrollEventThrottle={16}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }
