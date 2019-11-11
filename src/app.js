@@ -11,6 +11,7 @@ import RealWorldAnimationsScreen from './real-world-animations-screen';
 import PanResponderScreen from './pan-responder-screen';
 import ShareScreen from './share-screen';
 import DragAndDropTagScreen from './drag-and-drop-tag-screen';
+import DragAndDrop2Screen from './drag-and-drop-2-screen';
 import SimpleLayoutAnimationScreen from './simple-layout-animation-screen';
 
 const transitionConfig = () => {
@@ -64,6 +65,7 @@ const RootStack = createStackNavigator(
     Share: ShareScreen,
     DragAndDropTag: DragAndDropTagScreen,
     SimpleLayoutAnimation: SimpleLayoutAnimationScreen,
+    DragAndDrop2: DragAndDrop2Screen,
   },
   {
     initialRouteName: 'Home',

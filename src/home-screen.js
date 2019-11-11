@@ -35,6 +35,10 @@ export default (props) => (
         <View style={{flex: 1, height: '100%', backgroundColor: '#e1e1e1'}} />
       </MaskedView>
     <Button
+      title="Go to Pan drag and drop 2"
+      onPress={() => props.navigation.navigate('DragAndDrop2')}
+    />
+    <Button
       title="Go to simple layout animation"
       onPress={() => props.navigation.navigate('SimpleLayoutAnimation')}
     />
