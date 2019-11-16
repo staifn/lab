@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'react-native';
+import { Button, View } from 'react-native';
 import ScrollableModal from '../components/scrollable-modal';
 
 const ScrollableModalScreen = () => {
@@ -12,9 +12,12 @@ const ScrollableModalScreen = () => {
 	const handleModalHidden = () => {
 		setShowModal(false);
 	}
-	return !showModal
-	? <Button title='Show modal' onPress={handleShowModal} />
-	:<ScrollableModal onModalHidden={handleModalHidden} />
+	return (
+		<>
+			<Button title='Show modal' onPress={handleShowModal} />
+			{showModal && <ScrollableModal onModalHidden={handleModalHidden} />}
+		</>
+	)
 }
 
 export default ScrollableModalScreen;
