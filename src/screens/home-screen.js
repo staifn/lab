@@ -35,6 +35,10 @@ export default (props) => (
         <View style={{flex: 1, height: '100%', backgroundColor: '#e1e1e1'}} />
       </MaskedView>
     <Button
+      title="Go to scrollable modal"
+      onPress={() => props.navigation.navigate('ScrollableModal')}
+    />
+    <Button
       title="Go to Pan drag and drop simple"
       onPress={() => props.navigation.navigate('DragAndDropSimple')}
     />
