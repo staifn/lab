@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import Tags from './components/Tags';
+import Tags from '../components/Tags';
 
 const TAGS = [
   '#love',

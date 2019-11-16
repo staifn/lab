@@ -1,7 +1,7 @@
 import React from 'react';
 import { MaskedViewIOS, StyleSheet, Text, View, SafeAreaView, ScrollView, StatusBar, Animated } from 'react-native';
 
-import TabBar, {TABBAR_HEIGHT, TABBAR_WIDTH, TAB_WIDTH} from "./components/TabBar";
+import TabBar, {TABBAR_HEIGHT, TABBAR_WIDTH, TAB_WIDTH} from "../components/TabBar";
 
 type AppState = {
   x: Animated.Value

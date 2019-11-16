@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { Animated, SafeAreaView, View } from "react-native";
 
-import pokemon from "./data/pokemon";
-import pokemon_stats from "./data/pokemon-stats";
+import pokemon from "../data/pokemon";
+import pokemon_stats from "../data/pokemon-stats";
 
-import Header from "./components/Header";
-import CardList from "./components/CardList";
-import AnimatedModal from "./components/AnimatedModal";
-import BigCard from "./components/BigCard";
-import { getRandomInt } from './utils';
-import { HEADER_MAX_HEIGHT } from "./settings/layout";
-import AnimatedHeader from "./components/AnimatedHeader";
+import Header from "../components/Header";
+import CardList from "../components/CardList";
+import AnimatedModal from "../components/AnimatedModal";
+import BigCard from "../components/BigCard";
+import { getRandomInt } from '../utils';
+import { HEADER_MAX_HEIGHT } from "../settings/layout";
+import AnimatedHeader from "../components/AnimatedHeader";
 
 type Props = {};
 export default class App extends Component<Props> {

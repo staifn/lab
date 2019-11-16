@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Animated, Button, View, Text, Easing } from 'react-native';
 import MaskedView from '@react-native-community/masked-view';
 
-import Test from './test';
+import Test from '../test';
 
 export default (props) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -34,6 +34,14 @@ export default (props) => (
         <View style={{flex: 1, height: '100%', backgroundColor: '#F76C5E'}} />
         <View style={{flex: 1, height: '100%', backgroundColor: '#e1e1e1'}} />
       </MaskedView>
+    <Button
+      title="Go to Pan drag and drop simple"
+      onPress={() => props.navigation.navigate('DragAndDropSimple')}
+    />
+    <Button
+      title="Go to Pan drag and drop bin"
+      onPress={() => props.navigation.navigate('DragAndDropBin')}
+    />
     <Button
       title="Go to Pan drag and drop 2"
       onPress={() => props.navigation.navigate('DragAndDrop2')}

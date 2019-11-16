@@ -3,16 +3,18 @@ import { Animated, Easing, Button, View, Text } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import HomeScreen from './home-screen';
-import DetailsScreen from './details-screen';
-import SpringScreen from './spring-screen';
-import GoogleChromeTabsScreen from './google-chrome-tabs-screen';
-import RealWorldAnimationsScreen from './real-world-animations-screen';
-import PanResponderScreen from './pan-responder-screen';
-import ShareScreen from './share-screen';
-import DragAndDropTagScreen from './drag-and-drop-tag-screen';
-import DragAndDrop2Screen from './drag-and-drop-2-screen';
-import SimpleLayoutAnimationScreen from './simple-layout-animation-screen';
+import HomeScreen from './screens/home-screen';
+import DetailsScreen from './screens/details-screen';
+import SpringScreen from './screens/spring-screen';
+import GoogleChromeTabsScreen from './screens/google-chrome-tabs-screen';
+import RealWorldAnimationsScreen from './screens/real-world-animations-screen';
+import PanResponderScreen from './screens/pan-responder-screen';
+import ShareScreen from './screens/share-screen';
+import DragAndDropTagScreen from './screens/drag-and-drop-tag-screen';
+import DragAndDrop2Screen from './screens/drag-and-drop-2-screen';
+import SimpleLayoutAnimationScreen from './screens/simple-layout-animation-screen';
+import DragAndDropBinScreen from './screens/drag-and-drop-bin-screen';
+import DragAndDropSimpleScreen from './screens/drag-and-drop-simple-screen';
 
 const transitionConfig = () => {
       return {
@@ -66,6 +68,8 @@ const RootStack = createStackNavigator(
     DragAndDropTag: DragAndDropTagScreen,
     SimpleLayoutAnimation: SimpleLayoutAnimationScreen,
     DragAndDrop2: DragAndDrop2Screen,
+    DragAndDropBin: DragAndDropBinScreen,
+    DragAndDropSimple: DragAndDropSimpleScreen,
   },
   {
     initialRouteName: 'Home',

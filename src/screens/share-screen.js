@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View } from "react-native";
 
-import IconLabel from "./components/IconLabel";
+import IconLabel from "../components/IconLabel";
 
 type Props = {};
 export default class Share extends Component<Props> {
