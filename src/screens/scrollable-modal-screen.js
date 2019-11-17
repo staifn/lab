@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import { Button, View } from 'react-native';
+import { Button, Modal, View } from 'react-native';
 import ScrollableModal from '../components/scrollable-modal';
 
 const ScrollableModalScreen = () => {
-	const [showModal, setShowModal] = useState(false);
+	const [visible, setVisible] = useState(false);
 
 	const handleShowModal = () => {
-		setShowModal(true);
+		setVisible(true);
 	}
 
 	const handleModalHidden = () => {
-		setShowModal(false);
+		setVisible(false);
 	}
 	return (
 		<>
 			<Button title='Show modal' onPress={handleShowModal} />
-			{showModal && <ScrollableModal onModalHidden={handleModalHidden} />}
+			<Modal transparent={true} visible={visible}>
+				<ScrollableModal onModalHidden={handleModalHidden} />
+			</Modal> 
 		</>
 	)
 }

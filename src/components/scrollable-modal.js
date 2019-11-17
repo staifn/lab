@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Animated, Button, Dimensions, PanResponder, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import { Header } from 'react-navigation-stack';
 
 const { height } = Dimensions.get('window');
 const ScrollableModal = ({ onModalHidden }) => {
@@ -67,7 +66,7 @@ const ScrollableModal = ({ onModalHidden }) => {
 			<TouchableWithoutFeedback>
 				<Animated.View style={{ height: '100%', width: '100%', backgroundColor: '#000', opacity }}></Animated.View>
 			</TouchableWithoutFeedback>
-			<Animated.View style={[styles.modal, { top: height - 24 - Header.HEIGHT}, { transform: [{ translateY: pan.y }]}]}>
+			<Animated.View style={[styles.modal, { top: height}, { transform: [{ translateY: pan.y }]}]}>
 				<View style={{ height: 100, backgroundColor: '#000'}} onLayout={handleLayout}></View>
 			</Animated.View>
 		</View>
