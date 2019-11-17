@@ -23,15 +23,13 @@ const ScrollableModal = ({ onModalHidden }) => {
 		}, // Creates a function to handle the movement and set offsets
 		onPanResponderRelease: (e, gestureState) => {
 			pan.flattenOffset();
-			if (gestureState.dx === 0 && gestureState.dy === 0) {
+			if (gestureState.dx === 0 && gestureState.dy ===  0 || gestureState.dy >= modalHeight - 30) {
 				handlePress();
 			} else {
 				Animated.timing(pan, {
 					toValue: {x: 0, y: -modalHeight}
 				}).start();
 			}
-			 // Flatten the offset so it resets the default positioning
-			
 		}
 	});
 
