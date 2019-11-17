@@ -15,9 +15,7 @@ const ScrollableModalScreen = () => {
 	return (
 		<>
 			<Button title='Show modal' onPress={handleShowModal} />
-			<Modal transparent={true} visible={visible}>
-				<ScrollableModal onModalHidden={handleModalHidden} />
-			</Modal> 
+			<ScrollableModal visible={visible} onModalHidden={handleModalHidden} />
 		</>
 	)
 }
