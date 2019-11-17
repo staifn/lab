@@ -36,7 +36,7 @@ class ScrollableModal extends React.Component {
 
   onPanResponderRelease = (e, gestureState) => {
     this.pan.flattenOffset();
-    if (gestureState.dx === 0 && gestureState.dy ===  0 || gestureState.dy >= this.state.modalHeight - 30) {
+    if (gestureState.dx === 0 && gestureState.dy ===  0 && gestureState.y0 < height - this.state.modalHeight || gestureState.dy >= this.state.modalHeight - 50) {
       this.handlePress();
     } else {
       Animated.timing(this.pan, {
@@ -92,7 +92,9 @@ class ScrollableModal extends React.Component {
             <Animated.View style={{ height: '100%', width: '100%', backgroundColor: '#000', opacity: this.interpolatedOpacity }}></Animated.View>
           </TouchableWithoutFeedback>
           <Animated.View style={[styles.modal, { top: height }, { transform: [{ translateY: this.pan }]}]}>
-            <View style={{ height: 100, backgroundColor: '#000'}} onLayout={this.handleLayout}></View>
+            <View onLayout={this.handleLayout}>
+              {this.props.children}
+            </View>
           </Animated.View>
         </View>
       </Modal>
