@@ -17,6 +17,12 @@ class ScrollableModal extends React.Component {
     this.opacity = new Animated.Value(0);
     this.panValue = this.pan.addListener(({ value }) => this.panValue = value);
 
+    this.modalPosition = this.pan.interpolate({
+      inputRange: [- height, height - 150],
+      outputRange: [- height, height - 150],
+      extrapolate: 'clamp'
+    })
+
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
       onMoveShouldSetPanResponderCapture: () => this.state.panEnabled,
@@ -36,11 +42,16 @@ class ScrollableModal extends React.Component {
 
   onPanResponderRelease = (e, gestureState) => {
     this.pan.flattenOffset();
-    if (gestureState.dx === 0 && gestureState.dy ===  0 && gestureState.y0 < height - this.state.modalHeight || gestureState.dy >= this.state.modalHeight - 50) {
+    if (
+      gestureState.dx === 0
+      && gestureState.dy ===  0
+      && gestureState.y0 < height - this.state.modalHeight
+      || gestureState.dy >= this.state.modalHeight - 50
+    ) {
       this.handlePress();
     } else {
-      Animated.timing(this.pan, {
-        toValue: -this.state.modalHeight,
+      Animated.spring(this.pan, {
+        toValue: 0,
       }).start();
     }
   }
@@ -51,10 +62,26 @@ class ScrollableModal extends React.Component {
     });
 
     this.interpolatedOpacity = this.pan.interpolate({
-      inputRange: [-e.nativeEvent.layout.height, 0],
+      inputRange: [0, e.nativeEvent.layout.height],
       outputRange: [OPACITY_MAX, 0],
       extrapolate: 'clamp'
     })
+
+    this.modalPosition = this.pan.interpolate({
+      inputRange: [e.nativeEvent.layout.height + 150 - height, e.nativeEvent.layout.height],
+      outputRange: [e.nativeEvent.layout.height + 150 - height, e.nativeEvent.layout.height],
+      extrapolate: 'clamp'
+    })
+
+    this.pan.setValue(e.nativeEvent.layout.height);
+    setTimeout(() => {
+      this.setState({
+        panEnabled: true,
+      })
+    }, 500)
+    Animated.spring(this.pan, {
+      toValue: 0,
+    }).start(); 
 	}
 
 	handlePress = () => {
@@ -62,27 +89,12 @@ class ScrollableModal extends React.Component {
       panEnabled: false,
     })
 
-		Animated.parallel([
-			Animated.timing(this.pan, {
-				toValue: 0,
-			}),
-		]).start(() => {
+    Animated.timing(this.pan, {
+      toValue: this.state.modalHeight,
+    }).start(() => {
       this.props.onModalHidden();
     });
 	}
-
-  handleModalShow = () => {
-    Animated.parallel([
-			Animated.timing(this.pan, {
-				toValue: -this.state.modalHeight,
-			}),
-		]).start(() => {
-      // this.props.onModalVisible();
-      this.setState({
-        panEnabled: true,
-      })
-    }); 
-  }
 
   render() {
     return (
@@ -91,7 +103,8 @@ class ScrollableModal extends React.Component {
           <TouchableWithoutFeedback>
             <Animated.View style={{ height: '100%', width: '100%', backgroundColor: '#000', opacity: this.interpolatedOpacity }}></Animated.View>
           </TouchableWithoutFeedback>
-          <Animated.View style={[styles.modal, { top: height }, { transform: [{ translateY: this.pan }]}]}>
+          <Animated.View style={[styles.modal, { top: height - this.state.modalHeight }, { transform: [{ translateY: this.modalPosition }]}]}>
+            <View style={{height: 5, width: 50, backgroundColor: '#fff', position: 'absolute', marginTop: -15, alignSelf: 'center', borderRadius: 5 }} />
             <View onLayout={this.handleLayout}>
               {this.props.children}
             </View>
@@ -112,6 +125,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		backgroundColor: '#ffffff',
 		position: 'absolute',
+    borderRadius: 10
 	}
 
 })

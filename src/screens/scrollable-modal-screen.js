@@ -46,11 +46,13 @@ const ScrollableModalScreen = () => {
 		<>
 			<Button title='Show modal' onPress={handleShowModal} />
 			<ScrollableModal visible={visible} onModalHidden={handleModalHidden} onModalVisible={handleModalVisible} panEnabled={panEnabled}>
-      <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={item => item.id}
-      />
+      <View style={styles.list}>
+        <FlatList
+          data={DATA}
+          renderItem={({ item }) => <Item title={item.title} />}
+          keyExtractor={item => item.id}
+        />
+      </View>
       </ScrollableModal>
 		</>
 	)
@@ -58,8 +60,8 @@ const ScrollableModalScreen = () => {
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  list: {
+    paddingVertical: 20,
   },
   item: {
     backgroundColor: '#f9c2ff',
