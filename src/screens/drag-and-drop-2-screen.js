@@ -1,6 +1,7 @@
 import React, { createRef } from 'react';
 import { Animated, Button, FlatList, PanResponder, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
+const margin = 100;
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
@@ -49,7 +50,7 @@ export default class App extends React.Component {
     })
   }
   scrollOffset = 0;
-  flatlistTopOffset = 0;
+  flatlistTopOffset = 100;
   rowHeight = 0;
   currentIdx = -1;
   _panResponder;
@@ -72,7 +73,7 @@ export default class App extends React.Component {
         console.log('gestureState grant', gestureState)
         this.currentIdx = this.yToIndex(gestureState.y0)
         this.currentY = gestureState.y0;
-        Animated.event([{ y: this.point.y}])({ y: gestureState.y0 - this.rowHeight/2  })
+        Animated.event([{ y: this.point.y}])({ y: gestureState.y0 - this.flatlistTopOffset - this.rowHeight/2  })
         this.setState({
           dragging: true,
           draggingIdx: this.currentIdx,
@@ -86,7 +87,7 @@ export default class App extends React.Component {
       onPanResponderMove: (evt, gestureState) => {
         console.log('gestureState move', gestureState)
         this.currentY = gestureState.moveY;
-        Animated.event([{ y: this.point.y}])({ y: gestureState.moveY - this.rowHeight/2  })
+        Animated.event([{ y: this.point.y}])({ y: gestureState.moveY - this.flatlistTopOffset - this.rowHeight/2  })
         // The most recent move distance is gestureState.move{X,Y}
         // The accumulated gesture distance since becoming responder is
         // gestureState.d{x,y}
@@ -100,7 +101,8 @@ export default class App extends React.Component {
       onPanResponderTerminate: (evt, gestureState) => {
         // Another component has become the responder, so this gesture
         // should be cancelled
-        this.reset();
+        // this.reset();
+        return true;
       },
       onShouldBlockNativeResponder: (evt, gestureState) => {
         // Returns whether this component should block native components from becoming the JS
@@ -115,12 +117,12 @@ export default class App extends React.Component {
       return;
     }
     requestAnimationFrame(() => {
-      if (this.currentY + 100 > this.flatlistHeight) {
+      if (this.currentY + 100 - this.flatlistTopOffset > this.flatlistHeight) {
         this.flatList.current.scrollToOffset({
           offset: this.scrollOffset + 20,
           animated: false,
         })
-      } else if (this.currentY < 100) {
+      } else if (this.currentY - this.flatlistTopOffset < 100) {
         this.flatList.current.scrollToOffset({
           offset: this.scrollOffset - 20,
           animated: false,
@@ -174,8 +176,12 @@ export default class App extends React.Component {
         <Text style={{ fontSize: 22, textAlign: 'center', flex: 1 }}>{item}</Text>
       </View>
     );
+    console.log('this.flatlistTopOffset', this.flatlistTopOffset)
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={{ height: 500, marginTop: this.flatlistTopOffset}} onLayout={(e) =>
+
+        console.log('e.nativeEvent', e.nativeEvent)
+      }>
       <View style={{ height: 0}}></View>
         {dragging && (<Animated.View style={{ position: 'absolute', backgroundColor: 'black', zIndex: 2, width: '100%', top: this.point.getLayout().top }}>
           {renderItem({ item: data[draggingIdx], index: -1 }, true)}
@@ -199,12 +205,11 @@ export default class App extends React.Component {
             this.scrollOffset = e.nativeEvent.contentOffset.y
           }}
           onLayout={e => {
-            this.flatlistTopOffset = e.nativeEvent.layout.y;
             this.flatlistHeight = e.nativeEvent.layout.height;
           }}
           scrollEventThrottle={16}
         />
-      </SafeAreaView>
+      </View>
     );
   }
 }
