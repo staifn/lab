@@ -9,10 +9,10 @@ class ScrollableModal extends React.Component {
     modalHeight: 0,
     panEnabled: false
   }
-  
+
   constructor(props) {
     super(props);
-    
+
     this.pan = new Animated.Value(0);
     this.opacity = new Animated.Value(0);
     this.panValue = this.pan.addListener(({ value }) => this.panValue = value);
@@ -28,6 +28,7 @@ class ScrollableModal extends React.Component {
       onMoveShouldSetPanResponderCapture: () => this.state.panEnabled,
       onStartShouldSetPanResponder: () => true,
       onPanResponderGrant: (e, gestureState) => {
+        console.log('pan')
         this.pan.setOffset(this.panValue)
       },
       onPanResponderMove: (e, gestureState) => {
@@ -81,10 +82,13 @@ class ScrollableModal extends React.Component {
     }, 500)
     Animated.spring(this.pan, {
       toValue: 0,
-    }).start(); 
+    }).start();
 	}
 
 	handlePress = () => {
+    if (!this.state.panEnabled) {
+      return;
+    }
     this.setState({
       panEnabled: false,
     })
@@ -100,7 +104,7 @@ class ScrollableModal extends React.Component {
     return (
       <Modal style={styles.container} transparent={true} visible={this.props.visible} onShow={this.handleModalShow}>
         <View {...this._panResponder.panHandlers}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={this.handlePress}>
             <Animated.View style={{ height: '100%', width: '100%', backgroundColor: '#000', opacity: this.interpolatedOpacity }}></Animated.View>
           </TouchableWithoutFeedback>
           <Animated.View style={[styles.modal, { top: height - this.state.modalHeight }, { transform: [{ translateY: this.modalPosition }]}]}>
