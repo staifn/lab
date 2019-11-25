@@ -17,6 +17,7 @@ import DragAndDropBinScreen from './screens/drag-and-drop-bin-screen';
 import DragAndDropSimpleScreen from './screens/drag-and-drop-simple-screen';
 import ScrollableModalScreen from './screens/scrollable-modal-screen';
 import DraggableListScreen from './screens/draggable-list-screen';
+import ImageZoomScreen from './screens/image-zoom-screen';
 
 const transitionConfig = () => {
       return {
@@ -74,6 +75,7 @@ const RootStack = createStackNavigator(
     DragAndDropSimple: DragAndDropSimpleScreen,
     ScrollableModal: ScrollableModalScreen,
     DraggableList: DraggableListScreen,
+    ImageZoom: ImageZoomScreen,
   },
   {
     initialRouteName: 'Home',
