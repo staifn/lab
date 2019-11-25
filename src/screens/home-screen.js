@@ -35,9 +35,17 @@ export default (props) => (
         <View style={{flex: 1, height: '100%', backgroundColor: '#e1e1e1'}} />
       </MaskedView>
     <Button
-      title="Go to Image Zoom Screen"
-      onPress={() => props.navigation.navigate('ImageZoom')}
+      title="Go to Reanimated Tuto 2 Screen"
+      onPress={() => props.navigation.navigate('ReanimatedTuto2')}
     />
+  <Button
+    title="Go to Reanimated Tuto 1 Screen"
+    onPress={() => props.navigation.navigate('ReanimatedTuto1')}
+  />
+  <Button
+    title="Go to Image Zoom Screen"
+    onPress={() => props.navigation.navigate('ImageZoom')}
+  />
   <Button
     title="Go to draggable list"
     onPress={() => props.navigation.navigate('DraggableList')}

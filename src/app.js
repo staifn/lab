@@ -18,6 +18,8 @@ import DragAndDropSimpleScreen from './screens/drag-and-drop-simple-screen';
 import ScrollableModalScreen from './screens/scrollable-modal-screen';
 import DraggableListScreen from './screens/draggable-list-screen';
 import ImageZoomScreen from './screens/image-zoom-screen';
+import ReanimatedTuto1Screen from './screens/reanimated-tuto1-screen';
+import ReanimatedTuto2Screen from './screens/reanimated-tuto2-screen';
 
 const transitionConfig = () => {
       return {
@@ -76,9 +78,11 @@ const RootStack = createStackNavigator(
     ScrollableModal: ScrollableModalScreen,
     DraggableList: DraggableListScreen,
     ImageZoom: ImageZoomScreen,
+    ReanimatedTuto1: ReanimatedTuto1Screen,
+    ReanimatedTuto2: ReanimatedTuto2Screen,
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'ReanimatedTuto2',
     transitionConfig
   }
 );
