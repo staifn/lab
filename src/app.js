@@ -20,6 +20,7 @@ import DraggableListScreen from './screens/draggable-list-screen';
 import ImageZoomScreen from './screens/image-zoom-screen';
 import ReanimatedTuto1Screen from './screens/reanimated-tuto1-screen';
 import ReanimatedTuto2Screen from './screens/reanimated-tuto2-screen';
+import SimplePhysicsScreen from './screens/simple-physics-screen';
 
 const transitionConfig = () => {
       return {
@@ -80,9 +81,10 @@ const RootStack = createStackNavigator(
     ImageZoom: ImageZoomScreen,
     ReanimatedTuto1: ReanimatedTuto1Screen,
     ReanimatedTuto2: ReanimatedTuto2Screen,
+    SimplePhysics: SimplePhysicsScreen,
   },
   {
-    initialRouteName: 'ReanimatedTuto2',
+    initialRouteName: 'SimplePhysics',
     transitionConfig
   }
 );
