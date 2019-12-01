@@ -21,6 +21,7 @@ import ImageZoomScreen from './screens/image-zoom-screen';
 import ReanimatedTuto1Screen from './screens/reanimated-tuto1-screen';
 import ReanimatedTuto2Screen from './screens/reanimated-tuto2-screen';
 import SimplePhysicsScreen from './screens/simple-physics-screen';
+import ReanimatedHeaderScreen from './screens/reanimated-header-screen';
 
 const transitionConfig = () => {
       return {
@@ -82,9 +83,10 @@ const RootStack = createStackNavigator(
     ReanimatedTuto1: ReanimatedTuto1Screen,
     ReanimatedTuto2: ReanimatedTuto2Screen,
     SimplePhysics: SimplePhysicsScreen,
+    ReanimatedHeader: ReanimatedHeaderScreen,
   },
   {
-    initialRouteName: 'SimplePhysics',
+    initialRouteName: 'ReanimatedHeader',
     transitionConfig
   }
 );

@@ -35,9 +35,13 @@ export default (props) => (
         <View style={{flex: 1, height: '100%', backgroundColor: '#e1e1e1'}} />
       </MaskedView>
     <Button
-      title="Go to Simple Physics Screen"
-      onPress={() => props.navigation.navigate('SimplePhysics')}
+      title="Go to Reanimated header Screen"
+      onPress={() => props.navigation.navigate('ReanimatedHeader')}
     />
+  <Button
+    title="Go to Simple Physics Screen"
+    onPress={() => props.navigation.navigate('SimplePhysics')}
+  />
   <Button
     title="Go to Reanimated Tuto 2 Screen"
     onPress={() => props.navigation.navigate('ReanimatedTuto2')}
